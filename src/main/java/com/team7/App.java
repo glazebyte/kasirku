@@ -20,10 +20,9 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         // init_db
         myData = new AppData();
-        myData.connect();
         myData.Setup();
 
-        scene = new Scene(loadFXML("login"), 640, 480);
+        scene = new Scene(loadFXML("login"), 1280, 720);
         stage.setScene(scene);
         stage.show();
     }
