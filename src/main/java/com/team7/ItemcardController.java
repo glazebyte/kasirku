@@ -7,6 +7,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import java.awt.image.BufferedImage;
 
@@ -17,6 +18,8 @@ public class ItemcardController {
     @FXML
     private Text item_title;
 
+    @FXML
+    private VBox item_box;
 
     @FXML
     private ImageView product_image;
@@ -36,4 +39,9 @@ public class ItemcardController {
         item_price.setText(idr.format(product.getPrice()));
         item_title.setText(product.getName());
     }
+
+    public void on_click(){
+        
+    }
+
 }

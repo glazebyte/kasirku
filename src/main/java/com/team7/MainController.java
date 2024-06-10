@@ -38,6 +38,7 @@ public class MainController {
     private ArrayList<Product> makananList = new ArrayList<Product>();
     private ArrayList<Product> minumanList = new ArrayList<Product>();
     private ArrayList<Product> lainList = new ArrayList<Product>();
+    private ArrayList<CustomerTransaction> transactions = new ArrayList<CustomerTransaction>();
 
 
     @FXML
@@ -66,6 +67,7 @@ public class MainController {
                     collumn = 0;
                     row++;
                 }
+                itemcard.setOnMouseClicked(event -> add_to_transcaction(makanan));
                 item_container.add(itemcard, collumn++, row);
                 GridPane.setMargin(itemcard, new Insets(10));
             } catch (IOException e) {
@@ -91,6 +93,7 @@ public class MainController {
                     collumn = 0;
                     row++;
                 }
+                itemcard.setOnMouseClicked(event -> add_to_transcaction(minuman));
                 item_container.add(itemcard, collumn++, row);
                 GridPane.setMargin(itemcard, new Insets(10));
             } catch (IOException e) {
@@ -116,6 +119,7 @@ public class MainController {
                     collumn = 0;
                     row++;
                 }
+                itemcard.setOnMouseClicked(event -> add_to_transcaction(lain));
                 item_container.add(itemcard, collumn++, row);
                 GridPane.setMargin(itemcard, new Insets(10));
             } catch (IOException e) {
@@ -154,5 +158,10 @@ public class MainController {
 
         setMenu(1);
         
+    }
+
+    private void add_to_transcaction(Product product){
+        // transactions.add(new CustomerTransaction(0, 0, 0))
+        System.out.println(product.getName());
     }
 }
