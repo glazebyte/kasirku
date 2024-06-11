@@ -50,12 +50,12 @@ public class AppData {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             System.out.println("failed to get data");
-            
+
         }
         close();
     }
 
-    
+
     public void getMakananList(ArrayList<Product> makananList){
         connect();
         makananList.removeAll(makananList);
@@ -137,7 +137,7 @@ public class AppData {
         close();
     }
     public void getTransactionList(){
-        
+
     }
 
     public int addTransaction(Transaction transaction) {
@@ -242,5 +242,29 @@ public class AppData {
 
         return transactionId;
     }
-    
+
+    public boolean checkLogin(String username, String password) {
+        connect();
+        boolean isValid = false;
+
+        String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                isValid = true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            close();
+        }
+
+        return isValid;
+    }
+
 }

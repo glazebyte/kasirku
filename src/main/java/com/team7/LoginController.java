@@ -13,8 +13,21 @@ public class LoginController {
     @FXML
     private TextField username;
 
+    private AppData myData = new AppData();
+
     @FXML
     private void switchToMain() throws IOException {
-        App.setRoot("main");
+        String name = username.getText();
+        String pass = password.getText();
+
+        System.out.println(name);
+
+        boolean isLogin = myData.checkLogin(name, pass);
+
+        if(isLogin){
+            App.setRoot("main");
+        }else{
+            System.out.println("Invalid username or password.");
+        }
     }
 }
