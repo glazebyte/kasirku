@@ -8,8 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class MainController {
     @FXML
@@ -27,9 +30,17 @@ public class MainController {
     @FXML
     private Button side_minuman;
 
-    @FXML
-    private GridPane item_container;
+    // @FXML
+    // private GridPane item_container;
 
+    @FXML
+    private ScrollPane center_pane;
+
+    @FXML
+    private Text total_amount;
+
+    @FXML
+    private HBox checkout_button;
 
     private AppData myData = new AppData();
 
@@ -38,7 +49,7 @@ public class MainController {
     private ArrayList<Product> makananList = new ArrayList<Product>();
     private ArrayList<Product> minumanList = new ArrayList<Product>();
     private ArrayList<Product> lainList = new ArrayList<Product>();
-    private ArrayList<CustomerTransaction> transactions = new ArrayList<CustomerTransaction>();
+    private ArrayList<TransactionDetail> transactionDetail = new ArrayList<TransactionDetail>();
 
 
     @FXML
@@ -54,7 +65,13 @@ public class MainController {
     private void showMakanan(){
         int collumn = 0;
         int row = 1;
-        item_container.getChildren().clear();
+
+        GridPane item_container = new GridPane();
+        center_pane.setContent(item_container);
+        
+
+        
+
         myData.getMakananList(makananList);
         for (Product makanan : makananList) {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -67,7 +84,7 @@ public class MainController {
                     collumn = 0;
                     row++;
                 }
-                itemcard.setOnMouseClicked(event -> add_to_transcaction(makanan));
+                itemcard.setOnMouseClicked(event -> add_to_transaction(makanan));
                 item_container.add(itemcard, collumn++, row);
                 GridPane.setMargin(itemcard, new Insets(10));
             } catch (IOException e) {
@@ -80,7 +97,10 @@ public class MainController {
     private void showMinuman(){
         int collumn = 0;
         int row = 1;
-        item_container.getChildren().clear();
+
+        GridPane item_container = new GridPane();
+        center_pane.setContent(item_container);
+
         myData.getMinumanList(minumanList);
         for (Product minuman : minumanList) {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -93,7 +113,7 @@ public class MainController {
                     collumn = 0;
                     row++;
                 }
-                itemcard.setOnMouseClicked(event -> add_to_transcaction(minuman));
+                itemcard.setOnMouseClicked(event -> add_to_transaction(minuman));
                 item_container.add(itemcard, collumn++, row);
                 GridPane.setMargin(itemcard, new Insets(10));
             } catch (IOException e) {
@@ -106,7 +126,10 @@ public class MainController {
     private void showLain(){
         int collumn = 0;
         int row = 1;
-        item_container.getChildren().clear();
+
+        GridPane item_container = new GridPane();
+        center_pane.setContent(item_container);
+
         myData.getLainList(lainList);
         for (Product lain : lainList) {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -119,7 +142,7 @@ public class MainController {
                     collumn = 0;
                     row++;
                 }
-                itemcard.setOnMouseClicked(event -> add_to_transcaction(lain));
+                itemcard.setOnMouseClicked(event -> add_to_transaction(lain));
                 item_container.add(itemcard, collumn++, row);
                 GridPane.setMargin(itemcard, new Insets(10));
             } catch (IOException e) {
@@ -155,13 +178,42 @@ public class MainController {
         side_makanan.setOnAction( event -> setMenu(1));
         side_minuman.setOnAction( event -> setMenu(2));
         side_lain.setOnAction( event -> setMenu(3));
+        checkout_button.setOnMouseClicked(event -> checkout_transaction());
 
         setMenu(1);
         
     }
 
-    private void add_to_transcaction(Product product){
-        // transactions.add(new CustomerTransaction(0, 0, 0))
-        System.out.println(product.getName());
+    private void add_to_transaction(Product product){
+        if( !transactionDetail.contains(new TransactionDetail(product))){
+            transactionDetail.add(new TransactionDetail(product));
+            System.out.println("ditammbahkan");
+        }else{
+            System.out.println("sudah ada");
+        }
+    }
+
+    private void increase_product_in_transcaction(Product product){
+        for (TransactionDetail detail : transactionDetail) {
+            if (detail.getProduct().getProductId() == product.getProductId()) {
+                detail.setQuantity(detail.getQuantity()+1);
+            }
+        }
+    }
+    private void decrease_product_in_transcaction(Product product){
+        for (TransactionDetail detail : transactionDetail) {
+            if (detail.getProduct().getProductId() == product.getProductId()) {
+                if(detail.getQuantity()>1){
+                    detail.setQuantity(detail.getQuantity()-1);
+                }else{
+                    transactionDetail.remove(detail);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void checkout_transaction(){
+
     }
 }

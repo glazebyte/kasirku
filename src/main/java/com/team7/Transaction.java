@@ -1,15 +1,20 @@
 package com.team7;
 
+import java.util.List;
+import java.util.Date;
+
 public class Transaction {
     private int transactionId;
-    private String date;
+    private Date date;
     private double totalAmount;
+    private List<TransactionDetail> details;
+    private String customerName;
+    private String customerEmail;
 
-    // Constructor
-    public Transaction(int transactionId, String date, double totalAmount) {
-        this.transactionId = transactionId;
+    public Transaction(Date date, double totalAmount, List<TransactionDetail> details) {
         this.date = date;
         this.totalAmount = totalAmount;
+        this.details = details;
     }
 
     // Getters and Setters
@@ -21,11 +26,11 @@ public class Transaction {
         this.transactionId = transactionId;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -35,5 +40,29 @@ public class Transaction {
 
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public List<TransactionDetail> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<TransactionDetail> details) {
+        this.details = details;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 }

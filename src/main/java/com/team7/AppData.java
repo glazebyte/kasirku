@@ -2,8 +2,12 @@ package com.team7;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 
@@ -132,4 +136,111 @@ public class AppData {
         }
         close();
     }
+    public void getTransactionList(){
+        
+    }
+
+    public int addTransaction(Transaction transaction) {
+        String sqlSelectCustomer = "SELECT customer_id FROM customers WHERE email = ?";
+        String sqlInsertCustomer = "INSERT INTO customers (name, email) VALUES (?, ?)";
+        String sqlInsertTransaction = "INSERT INTO transactions (date, total_amount) VALUES (?, ?)";
+        String sqlInsertTransactionDetail = "INSERT INTO transaction_details (transaction_id, product_id, quantity, subtotal) VALUES (?, ?, ?, ?)";
+        String sqlInsertCustomerTransaction = "INSERT INTO customer_transactions (customer_id, transaction_id) VALUES (?, ?)";
+
+        PreparedStatement pstmtSelectCustomer = null;
+        PreparedStatement pstmtCustomer = null;
+        PreparedStatement pstmtTransaction = null;
+        PreparedStatement pstmtTransactionDetail = null;
+        PreparedStatement pstmtCustomerTransaction = null;
+
+        int transactionId = 0;
+        int customerId = 0;
+
+        try {
+            connect();
+
+            // Check if customer exists
+            pstmtSelectCustomer = conn.prepareStatement(sqlSelectCustomer);
+            pstmtSelectCustomer.setString(1, transaction.getCustomerEmail());
+            ResultSet rsCustomer = pstmtSelectCustomer.executeQuery();
+
+            if (rsCustomer.next()) {
+                customerId = rsCustomer.getInt("customer_id");
+            } else {
+                // Insert new customer
+                pstmtCustomer = conn.prepareStatement(sqlInsertCustomer, Statement.RETURN_GENERATED_KEYS);
+                pstmtCustomer.setString(1, transaction.getCustomerName());
+                pstmtCustomer.setString(2, transaction.getCustomerEmail());
+                pstmtCustomer.executeUpdate();
+                ResultSet rsNewCustomer = pstmtCustomer.getGeneratedKeys();
+                if (rsNewCustomer.next()) {
+                    customerId = rsNewCustomer.getInt(1);
+                }
+            }
+
+            // Insert new transaction
+            pstmtTransaction = conn.prepareStatement(sqlInsertTransaction, Statement.RETURN_GENERATED_KEYS);
+            pstmtTransaction.setString(1, new Date().toString());
+            pstmtTransaction.setDouble(2, transaction.getTotalAmount());
+            pstmtTransaction.executeUpdate();
+            ResultSet rsTransaction = pstmtTransaction.getGeneratedKeys();
+            if (rsTransaction.next()) {
+                transactionId = rsTransaction.getInt(1);
+            }
+
+            // Insert transaction details
+            pstmtTransactionDetail = conn.prepareStatement(sqlInsertTransactionDetail);
+            for (TransactionDetail detail : transaction.getDetails()) {
+                pstmtTransactionDetail.setInt(1, transactionId);
+                pstmtTransactionDetail.setInt(2, detail.getProduct().getProductId());
+                pstmtTransactionDetail.setInt(3, detail.getQuantity());
+                pstmtTransactionDetail.setDouble(4, detail.getSubtotal());
+                pstmtTransactionDetail.addBatch();
+            }
+            pstmtTransactionDetail.executeBatch();
+
+            // Link customer with transaction
+            pstmtCustomerTransaction = conn.prepareStatement(sqlInsertCustomerTransaction);
+            pstmtCustomerTransaction.setInt(1, customerId);
+            pstmtCustomerTransaction.setInt(2, transactionId);
+            pstmtCustomerTransaction.executeUpdate();
+
+            conn.commit();
+        } catch (SQLException e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                if (pstmtSelectCustomer != null) {
+                    pstmtSelectCustomer.close();
+                }
+                if (pstmtCustomer != null) {
+                    pstmtCustomer.close();
+                }
+                if (pstmtTransaction != null) {
+                    pstmtTransaction.close();
+                }
+                if (pstmtTransactionDetail != null) {
+                    pstmtTransactionDetail.close();
+                }
+                if (pstmtCustomerTransaction != null) {
+                    pstmtCustomerTransaction.close();
+                }
+                if (conn != null) {
+                    close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+
+        return transactionId;
+    }
+    
 }

@@ -17,7 +17,7 @@
             <Insets top="10.0" />
          </VBox.margin>
       </Text>
-      <ImageView fx:id="product_image" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="product_image" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="NEVER">
          <image>
             <Image url="@mie.png" />
          </image>

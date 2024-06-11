@@ -38,3 +38,8 @@
 .order_button:pressed{
     -fx-background-color : #9ed5f7;
 }
+.scroll_pane{
+    -fx-background: transparent; 
+    -fx-background-color: transparent;
+    /* -fx-control-inner-background: transparent; */
+}

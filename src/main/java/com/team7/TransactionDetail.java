@@ -3,17 +3,25 @@ package com.team7;
 public class TransactionDetail {
     private int detailId;
     private int transactionId;
-    private int productId;
+    private Product product;
     private int quantity;
     private double subtotal;
 
     // Constructor
-    public TransactionDetail(int detailId, int transactionId, int productId, int quantity, double subtotal) {
+    public TransactionDetail(int detailId, int transactionId, Product product, int quantity, double subtotal) {
         this.detailId = detailId;
         this.transactionId = transactionId;
-        this.productId = productId;
+        this.product = product;
         this.quantity = quantity;
         this.subtotal = subtotal;
+    }
+
+    public TransactionDetail(Product product) {
+        this.detailId = 0;
+        this.transactionId = 0;
+        this.product = product;
+        this.quantity = 1;
+        this.subtotal = product.getPrice();
     }
 
     // Getters and Setters
@@ -33,12 +41,12 @@ public class TransactionDetail {
         this.transactionId = transactionId;
     }
 
-    public int getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {
@@ -47,14 +55,33 @@ public class TransactionDetail {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+        setSubtotal(quantity*this.product.getPrice());
     }
 
     public double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(double subtotal) {
+    private void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null)
+            return false;
+
+        if(obj.getClass() != this.getClass())
+            return false;
+            
+        final TransactionDetail detail = (TransactionDetail) obj;
+        if (detail.product == null)
+            return false;
+
+        if (this.product.getProductId() == detail.product.getProductId())
+            return true;
+        else 
+            return false;
     }
 }
 
