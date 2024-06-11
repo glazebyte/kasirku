@@ -37,6 +37,9 @@ public class MainController {
     private ScrollPane center_pane;
 
     @FXML
+    private ScrollPane right_pane;
+
+    @FXML
     private Text total_amount;
 
     @FXML
@@ -191,6 +194,7 @@ public class MainController {
         }else{
             System.out.println("sudah ada");
         }
+        update_transaction_items(transactionDetail);
     }
 
     private void increase_product_in_transcaction(Product product){
@@ -213,6 +217,26 @@ public class MainController {
         }
     }
 
+    private void update_transaction_items(ArrayList<TransactionDetail> details){
+        int row = 1;
+        GridPane scroll_pane2 = new GridPane();
+        right_pane.setContent(scroll_pane2);
+        for (TransactionDetail detail : details) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("checkout_itemcard.fxml"));
+            try {
+                HBox checkoutItemBox = fxmlLoader.load();
+                CheckoutItemcardController checkoutItemcardController = fxmlLoader.getController();
+                checkoutItemcardController.setData(detail);
+                row++;
+                scroll_pane2.add(checkoutItemBox, 1, row);
+                GridPane.setMargin(checkoutItemBox, new Insets(10));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
     private void checkout_transaction(){
 
     }

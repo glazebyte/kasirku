@@ -40,8 +40,4 @@ public class ItemcardController {
         item_title.setText(product.getName());
     }
 
-    public void on_click(){
-        
-    }
-
 }

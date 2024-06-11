@@ -84,13 +84,13 @@
    <right>
       <VBox prefHeight="720.0" prefWidth="402.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane prefHeight="424.0" prefWidth="402.0" styleClass="scroll_pane" stylesheets="@style.css" VBox.vgrow="ALWAYS" />
+            <ScrollPane fx:id="right_pane" prefHeight="424.0" prefWidth="402.0" styleClass="scroll_pane" stylesheets="@style.css" VBox.vgrow="ALWAYS" />
             <VBox alignment="CENTER" maxHeight="-Infinity" prefHeight="120.0">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
                <children>
-                  <HBox alignment="CENTER_LEFT" styleClass="order_button" stylesheets="@style.css">
+                  <HBox fx:id="checkout_button" alignment="CENTER_LEFT" styleClass="order_button" stylesheets="@style.css">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -104,7 +104,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rp. 123.000,00">
+                        <Text fx:id="total_amount" strokeType="OUTSIDE" strokeWidth="0.0" text="Rp. 123.000,00">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -124,7 +124,7 @@
    <center>
       <VBox>
          <children>
-            <ScrollPane fx:id="center_pane" prefHeight="600.0" prefWidth="621.0" styleClass="scroll_pane" stylesheets="@style.css" />
+            <ScrollPane fx:id="center_pane" prefHeight="600.0" prefWidth="621.0" styleClass="scroll_pane" stylesheets="@style.css" VBox.vgrow="ALWAYS" />
             <VBox maxHeight="-Infinity" prefHeight="120.0">
                <children>
                   <HBox maxHeight="-Infinity" />
