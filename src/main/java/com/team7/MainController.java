@@ -178,7 +178,7 @@ public class MainController {
         side_makanan.setOnAction( event -> setMenu(1));
         side_minuman.setOnAction( event -> setMenu(2));
         side_lain.setOnAction( event -> setMenu(3));
-        checkout_button.setOnMouseClicked(event -> checkout_transaction());
+        // checkout_button.setOnMouseClicked(event -> checkout_transaction());
 
         setMenu(1);
         
