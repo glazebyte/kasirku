@@ -104,7 +104,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </Text>
-                        <Text fx:id="total_amount" strokeType="OUTSIDE" strokeWidth="0.0" text="Rp. 123.000,00">
+                        <Text fx:id="total_amount" strokeType="OUTSIDE" strokeWidth="0.0" text="Rp. 0.000,00">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>

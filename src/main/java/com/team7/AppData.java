@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
@@ -56,7 +56,7 @@ public class AppData {
     }
 
 
-    public void getMakananList(ArrayList<Product> makananList){
+    public void getMakananList(List<Product> makananList){
         connect();
         makananList.removeAll(makananList);
         try {
@@ -83,7 +83,7 @@ public class AppData {
         close();
     }
 
-    public void getMinumanList(ArrayList<Product> minumanList){
+    public void getMinumanList(List<Product> minumanList){
         connect();
         minumanList.removeAll(minumanList);
         try {
@@ -110,7 +110,7 @@ public class AppData {
         close();
     }
 
-    public void getLainList(ArrayList<Product> lainList){
+    public void getLainList(List<Product> lainList){
         connect();
         lainList.removeAll(lainList);
         try {

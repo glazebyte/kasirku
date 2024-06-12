@@ -1,6 +1,7 @@
 package com.team7;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Transaction {
@@ -15,6 +16,10 @@ public class Transaction {
         this.date = date;
         this.totalAmount = totalAmount;
         this.details = details;
+    }
+    public Transaction(){
+        this.details = new ArrayList<TransactionDetail>();
+        this.totalAmount = 0;
     }
 
     // Getters and Setters

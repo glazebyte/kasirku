@@ -1,18 +1,26 @@
 package com.team7;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class MainController {
     @FXML
@@ -47,12 +55,13 @@ public class MainController {
 
     private AppData myData = new AppData();
 
-    private ArrayList<Button> menuList = new ArrayList<Button>();
+    private List<Button> menuList = new ArrayList<Button>();
 
-    private ArrayList<Product> makananList = new ArrayList<Product>();
-    private ArrayList<Product> minumanList = new ArrayList<Product>();
-    private ArrayList<Product> lainList = new ArrayList<Product>();
-    private ArrayList<TransactionDetail> transactionDetail = new ArrayList<TransactionDetail>();
+    private List<Product> makananList = new ArrayList<Product>();
+    private List<Product> minumanList = new ArrayList<Product>();
+    private List<Product> lainList = new ArrayList<Product>();
+    private Transaction transactions = new Transaction();
+    // private List<TransactionDetail> transactionDetail = new ArrayList<TransactionDetail>();
 
 
     @FXML
@@ -70,10 +79,7 @@ public class MainController {
         int row = 1;
 
         GridPane item_container = new GridPane();
-        center_pane.setContent(item_container);
-        
-
-        
+        center_pane.setContent(item_container);    
 
         myData.getMakananList(makananList);
         for (Product makanan : makananList) {
@@ -181,44 +187,40 @@ public class MainController {
         side_makanan.setOnAction( event -> setMenu(1));
         side_minuman.setOnAction( event -> setMenu(2));
         side_lain.setOnAction( event -> setMenu(3));
-        // checkout_button.setOnMouseClicked(event -> checkout_transaction());
+        checkout_button.setOnMouseClicked(event -> checkout_event());
 
-        setMenu(1);
-        
+        setMenu(1);   
     }
 
     private void add_to_transaction(Product product){
-        if( !transactionDetail.contains(new TransactionDetail(product))){
-            transactionDetail.add(new TransactionDetail(product));
+        List<TransactionDetail> details = transactions.getDetails();
+        if( !details.contains(new TransactionDetail(product))){
+            details.add(new TransactionDetail(product));
             System.out.println("ditammbahkan");
         }else{
             System.out.println("sudah ada");
         }
-        update_transaction_items(transactionDetail);
+        update_transaction_items(transactions);
     }
 
-    private void increase_product_in_transcaction(Product product){
-        for (TransactionDetail detail : transactionDetail) {
-            if (detail.getProduct().getProductId() == product.getProductId()) {
-                detail.setQuantity(detail.getQuantity()+1);
-            }
-        }
+    private void increase_product_in_transaction(TransactionDetail detail){
+        detail.setQuantity(detail.getQuantity()+1);
+        update_transaction_items(transactions);
     }
-    private void decrease_product_in_transcaction(Product product){
-        for (TransactionDetail detail : transactionDetail) {
-            if (detail.getProduct().getProductId() == product.getProductId()) {
-                if(detail.getQuantity()>1){
-                    detail.setQuantity(detail.getQuantity()-1);
-                }else{
-                    transactionDetail.remove(detail);
-                    break;
-                }
-            }
-        }
+    private void decrease_product_in_transaction(TransactionDetail detail){
+        if(detail.getQuantity()>1)
+            detail.setQuantity(detail.getQuantity()-1);
+        else
+            transactions.getDetails().remove(detail);
+        update_transaction_items(transactions);
     }
 
-    private void update_transaction_items(ArrayList<TransactionDetail> details){
+    private void update_transaction_items(Transaction transaction){
+        List<TransactionDetail> details = transaction.getDetails();
+        Locale id = new Locale("id","ID");
+        NumberFormat idr = NumberFormat.getCurrencyInstance(id);
         int row = 1;
+        double totalAmount=0;
         GridPane scroll_pane2 = new GridPane();
         right_pane.setContent(scroll_pane2);
         for (TransactionDetail detail : details) {
@@ -230,14 +232,46 @@ public class MainController {
                 checkoutItemcardController.setData(detail);
                 row++;
                 scroll_pane2.add(checkoutItemBox, 1, row);
-                GridPane.setMargin(checkoutItemBox, new Insets(10));
+                checkoutItemcardController.plusButtonProperty().onMouseClickedProperty().setValue(event -> increase_product_in_transaction(detail));
+                checkoutItemcardController.minusButtonProperty().onMouseClickedProperty().setValue(event -> decrease_product_in_transaction(detail));
+                GridPane.setMargin(checkoutItemBox, new Insets(10,0,10,20));
+                totalAmount+=detail.getSubtotal();
+                transactions.setTotalAmount(totalAmount);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        total_amount.setText(idr.format(totalAmount));
     }
     
-    private void checkout_transaction(){
+    private void checkout_event(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("transaction_form.fxml"));
+            DialogPane form = fxmlLoader.load();
+            TransactionFormController formController = fxmlLoader.getController();
+            Scene scene = new Scene(form);
+            Stage stage = new Stage();
+            stage.setScene(scene); 
+            stage.show();
+            formController.addTransactionProperty().setOnMouseClicked(event -> {
+                checkout();
+                transactions = new Transaction();
+                stage.close();
+                update_transaction_items(transactions);
+            });
+            formController.CustomerTextField().setOnKeyTyped(event -> transactions.setCustomerName(formController.CustomerTextField().getText()));
+            formController.EmailTextField().setOnKeyTyped(event -> transactions.setCustomerEmail(formController.EmailTextField().getText()));
+            formController.settotalTextField(transactions.getTotalAmount());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
 
+    private void checkout(){
+        System.out.println(transactions.getTotalAmount());
+        System.out.println(transactions.getCustomerName());
+        System.out.println(transactions.getCustomerEmail());
     }
 }

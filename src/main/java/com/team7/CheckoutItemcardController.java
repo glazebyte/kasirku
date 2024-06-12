@@ -42,6 +42,13 @@ public class CheckoutItemcardController {
         }
         subtotal.setText(idr.format(detail.getSubtotal()));
         item_name.setText(detail.getProduct().getName());
-        // amount.setText(detail.getQuantity());
+        amount.setText(String.valueOf(detail.getQuantity()));
+    }
+    public Button minusButtonProperty(){
+        return minus;
+    }
+
+    public Button plusButtonProperty(){
+        return plus;
     }
 }
