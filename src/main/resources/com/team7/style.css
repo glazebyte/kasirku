@@ -1,28 +1,28 @@
 .side_button{
     -fx-background-radius : 20px;
     -fx-padding : 16px;
-    -fx-background-color : #5Fb9f1;
+    -fx-background-color : #a6c3e4;
 }
 .side_button:hover{
-    -fx-background-color : #93d6ff;
+    -fx-background-color : #93b9dd;
 }
 .side_button:selected{
-    -fx-background-color : #b9e4ff;
+    -fx-background-color : #cfede8;
 }
 .item_card{
     -fx-background-color : #FFFFFF;
     -fx-background-radius : 24px;
     -fx-border-width : 2px;
-    -fx-border-color : #5Fb9f1;
+    -fx-border-color : #f79ef1;
     -fx-border-radius : 24px;
     -fx-effect : dropShadow(three-pass-box,rgba(0,0,0,0.1),10,0,5,7);
 }
 .circle_button{
-    -fx-background-radius : 16px;
-    -fx-background-color : #5Fb9f1;
+    -fx-background-radius : 25px;
+    -fx-background-color : #cfede8;
 }
 .circle_button:pressed{
-    -fx-background-color : #93d6ff;
+    -fx-background-color : #f79ef1;
 }
 .center{
     -fx-padding : 10px;
@@ -30,16 +30,16 @@
 .order_button{
     -fx-background-radius : 20px;
     -fx-padding : 16px;
-    -fx-background-color : #5Fb9f1;
+    -fx-background-color : #f79ef1;
 }
 .order_button:hover{
-    -fx-background-color : #7eceff;
+    -fx-background-color : #f79ef1;
 }
 .order_button:pressed{
-    -fx-background-color : #9ed5f7;
+    -fx-background-color : #f79ef1;
 }
-.scroll_pane{
-    -fx-background: transparent; 
-    -fx-background-color: transparent;
-    /* -fx-control-inner-background: transparent; */
+.cll{
+    -fx-background-radius : 20px;
+    -fx-padding : 16px;
+    -fx-background-color : #89d1f3;
 }
