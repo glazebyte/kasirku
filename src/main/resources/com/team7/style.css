@@ -43,3 +43,7 @@
     -fx-padding : 16px;
     -fx-background-color : #89d1f3;
 }
+.transparent{
+    -fx-background-color : transparent;
+    -fx-background: transparent;
+}

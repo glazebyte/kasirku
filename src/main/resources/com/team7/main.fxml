@@ -74,8 +74,17 @@
                         <FontIcon iconLiteral="fas-bars" iconSize="20" wrappingWidth="20.5" />
                      </graphic>
                   </Button>
-                  <Button fx:id="button_refresh" mnemonicParsing="false" onAction="#refresh" text="refresh" visible="false" />
-                  <Button fx:id="button_login" mnemonicParsing="false" onAction="#switchToLogin" text="logout" visible="false" />
+                  <Button fx:id="side_table" alignment="TOP_LEFT" mnemonicParsing="false" prefHeight="26.0" prefWidth="257.0" styleClass="side_button" stylesheets="@style.css" text="Data Transaksi">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                     <graphic>
+                        <FontIcon iconLiteral="fas-table" iconSize="20" wrappingWidth="20.5" />
+                     </graphic>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
             </VBox>
          </children>
@@ -84,7 +93,7 @@
    <right>
       <VBox prefHeight="720.0" prefWidth="402.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane fx:id="right_pane" prefHeight="424.0" prefWidth="402.0" styleClass="scroll_pane" stylesheets="@style.css" VBox.vgrow="ALWAYS" />
+            <ScrollPane fx:id="right_pane" prefHeight="424.0" prefWidth="402.0" styleClass="transparent" stylesheets="@style.css" VBox.vgrow="ALWAYS" />
             <VBox alignment="CENTER" maxHeight="-Infinity" prefHeight="120.0">
                <VBox.margin>
                   <Insets />
@@ -124,7 +133,7 @@
    <center>
       <VBox>
          <children>
-            <ScrollPane fx:id="center_pane" prefHeight="600.0" prefWidth="621.0" styleClass="scroll_pane" stylesheets="@style.css" VBox.vgrow="ALWAYS" />
+            <ScrollPane fx:id="center_pane" prefHeight="600.0" prefWidth="621.0" styleClass="transparent" stylesheets="@style.css" VBox.vgrow="ALWAYS" />
             <VBox maxHeight="-Infinity" prefHeight="120.0">
                <children>
                   <HBox maxHeight="-Infinity" />

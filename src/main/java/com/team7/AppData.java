@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
@@ -206,6 +209,7 @@ public class AppData {
             pstmtCustomerTransaction.executeUpdate();
 
             conn.commit();
+            System.out.println("berhasil menambahkan transaksi");
         } catch (SQLException e) {
             try {
                 if (conn != null) {
@@ -265,6 +269,32 @@ public class AppData {
         }
 
         return isValid;
+    }
+
+    public void getAllTransactions(List<Transaction> transactions) {
+        transactions.removeAll(transactions);
+        String sql = "SELECT transactions.transaction_id, transactions.date, transactions.total_amount, customers.name AS customer_name, customers.email AS customer_email " +
+                     "FROM transactions " +
+                     "LEFT JOIN customer_transactions ON transactions.transaction_id = customer_transactions.transaction_id " +
+                     "LEFT JOIN customers ON customer_transactions.customer_id = customers.customer_id";
+        connect();
+        try(Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql);) {
+
+            while (rs.next()) {
+                int transactionId = rs.getInt("transaction_id");
+                String dateString = rs.getString("date");
+                double totalAmount = rs.getDouble("total_amount");
+                String customerName = rs.getString("customer_name");
+                String customerEmail = rs.getString("customer_email");
+
+                Transaction transaction = new Transaction(transactionId,dateString,totalAmount,customerName,customerEmail);
+
+                transactions.add(transaction);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }

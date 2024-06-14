@@ -11,11 +11,14 @@ public class Transaction {
     private List<TransactionDetail> details;
     private String customerName;
     private String customerEmail;
+    private String dateString;
 
-    public Transaction(Date date, double totalAmount, List<TransactionDetail> details) {
-        this.date = date;
+    public Transaction(int transactionId,String dateString, double totalAmount, String customerName,String customerEmail) {
+        this.transactionId = transactionId;
+        this.dateString = dateString;
         this.totalAmount = totalAmount;
-        this.details = details;
+        this.customerEmail = customerEmail;
+        this.customerName = customerName;
     }
     public Transaction(){
         this.details = new ArrayList<TransactionDetail>();
@@ -25,6 +28,14 @@ public class Transaction {
     // Getters and Setters
     public int getTransactionId() {
         return transactionId;
+    }
+
+    public String getDateString(){
+        return dateString;
+    }
+
+    public void setDateString(String dateString){
+        this.dateString =dateString;
     }
 
     public void setTransactionId(int transactionId) {

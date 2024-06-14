@@ -7,15 +7,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -52,6 +57,9 @@ public class MainController {
 
     @FXML
     private HBox checkout_button;
+
+    @FXML
+    private Button side_table;
 
     private AppData myData = new AppData();
 
@@ -161,35 +169,71 @@ public class MainController {
         }
     }
 
-    private void setMenu(int menu){
-        if (menu == 1){
-            side_makanan.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
-            side_minuman.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
-            side_lain.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
-            showMakanan();
-        }else if (menu == 2){
-            side_makanan.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
-            side_minuman.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
-            side_lain.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
-            showMinuman();
-        }else if(menu ==3){
-            side_makanan.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
-            side_minuman.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
-            side_lain.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
-            showLain();   
-        }
+    private void showTable(){
+        ObservableList<Transaction> transactions = FXCollections.observableArrayList();
+        myData.getAllTransactions(transactions);
+
+        TableView transaction_table = new TableView<Transaction>();
+      
+        TableColumn<Transaction , Integer> idColumn = new TableColumn<>("ID");
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("TransactionId"));
+
+        TableColumn<Transaction , String> dateColumn = new TableColumn<>("Date");
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("DateString"));
+
+        TableColumn<Transaction , Double> totalColumn = new TableColumn<>("Total Amount");
+        totalColumn.setCellValueFactory(new PropertyValueFactory<>("TotalAmount"));
+
+        TableColumn<Transaction , String> nameColumn = new TableColumn<>("Customer Name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("CustomerName"));
+
+        TableColumn<Transaction , String> emailColumn = new TableColumn<>("Customer Email");
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("CustomerEmail"));
+
+        transaction_table.getColumns().add(idColumn);
+        transaction_table.getColumns().add(dateColumn);
+        transaction_table.getColumns().add(totalColumn);
+        transaction_table.getColumns().add(nameColumn);
+        transaction_table.getColumns().add(emailColumn);
+        
+        transaction_table.setItems(transactions);
+        transaction_table.setMinSize(500,300);
+        transaction_table.setTranslateX(50);
+        transaction_table.setTranslateY(50);
+        center_pane.setContent(transaction_table);
+    }
+
+    private void setMenu(boolean button1,boolean button2,boolean button3,boolean button4){
+            side_makanan.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), button1);
+            side_minuman.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), button2);
+            side_lain.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), button3);
+            side_table.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), button4);
     }
 
     // @FXML
     public void initialize(){
         Collections.addAll(menuList,side_makanan,side_makanan,side_minuman);
 
-        side_makanan.setOnAction( event -> setMenu(1));
-        side_minuman.setOnAction( event -> setMenu(2));
-        side_lain.setOnAction( event -> setMenu(3));
+        side_makanan.setOnAction( event -> {
+            setMenu(true,false,false,false);
+            showMakanan();
+        });
+        side_minuman.setOnAction( event -> {
+            setMenu(false,true,false,false);
+            showMinuman();
+        });
+        side_lain.setOnAction( event -> {
+            setMenu(false,false,true,false);
+            showLain();
+        });
+        side_table.setOnAction(event -> {
+            setMenu(false, false, false, true);
+            showTable();
+        });
         checkout_button.setOnMouseClicked(event -> checkout_event());
 
-        setMenu(1);   
+        setMenu(true, false, false, false);
+        showMakanan();
     }
 
     private void add_to_transaction(Product product){
@@ -270,8 +314,6 @@ public class MainController {
     }
 
     private void checkout(){
-        System.out.println(transactions.getTotalAmount());
-        System.out.println(transactions.getCustomerName());
-        System.out.println(transactions.getCustomerEmail());
+        myData.addTransaction(transactions);
     }
 }
